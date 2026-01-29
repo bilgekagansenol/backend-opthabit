@@ -30,6 +30,7 @@ backend-opthabit/
 │   └── urls.py
 ├── manage.py
 ├── requirements.txt
+├── postman_collection.json # Postman test koleksiyonu
 └── .gitignore
 ```
 
@@ -49,7 +50,7 @@ backend-opthabit/
 | `/api/auth/register/` | POST | Kayıt |
 | `/api/auth/login/` | POST | Giriş (JWT token) |
 | `/api/auth/token/refresh/` | POST | Token yenile |
-| `/api/auth/profile/` | GET/PUT | Profil |
+| `/api/auth/profile/` | GET/PUT/PATCH | Profil |
 | `/api/auth/change-password/` | POST | Şifre değiştir |
 | `/api/auth/delete-account/` | DELETE | Hesap sil |
 
@@ -100,6 +101,13 @@ backend-opthabit/
 - [x] StudySession admin
 - URL: `/admin/`
 
+### 5. Postman Test Koleksiyonu
+- [x] `postman_collection.json` dosyası oluşturuldu
+- [x] Tüm endpoint'ler için hazır istekler
+- [x] Otomatik token yönetimi (login sonrası token kaydedilir)
+- [x] Otomatik session_id yönetimi (create sonrası ID kaydedilir)
+- [x] Import edip sırasıyla çalıştırılabilir
+
 ## Yapılacaklar (TODO)
 - [ ] Score hesaplama app'i
 - [ ] Google Sign-In entegrasyonu (User modelde alanlar yorum satırı olarak hazır)
@@ -119,5 +127,10 @@ source myenv/bin/activate
 python manage.py createsuperuser
 ```
 
+## Test Kullanıcısı
+- Username: `bilge`
+- Password: `admin123`
+- Superuser: Evet
+
 ## Son Güncelleme
-2026-01-28
+2026-01-29

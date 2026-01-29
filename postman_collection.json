@@ -1,0 +1,432 @@
+{
+	"info": {
+		"_postman_id": "opthabit-api-collection",
+		"name": "OptHabit API",
+		"description": "OptHabit Backend API Test Koleksiyonu",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000"
+		},
+		{
+			"key": "access_token",
+			"value": ""
+		},
+		{
+			"key": "refresh_token",
+			"value": ""
+		},
+		{
+			"key": "session_id",
+			"value": ""
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "1. Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.access) {",
+									"    pm.collectionVariables.set('access_token', jsonData.access);",
+									"}",
+									"if (jsonData.refresh) {",
+									"    pm.collectionVariables.set('refresh_token', jsonData.refresh);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"bilge\",\n    \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login", ""]
+						},
+						"description": "Kullanıcı girişi yaparak JWT token alır. Token otomatik olarak collection variable'a kaydedilir."
+					},
+					"response": []
+				},
+				{
+					"name": "2. Token Refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.access) {",
+									"    pm.collectionVariables.set('access_token', jsonData.access);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh\": \"{{refresh_token}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/token/refresh/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "token", "refresh", ""]
+						},
+						"description": "Refresh token kullanarak yeni access token alır."
+					},
+					"response": []
+				},
+				{
+					"name": "3. Register (Yeni Kullanıcı)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"testuser\",\n    \"email\": \"test@example.com\",\n    \"password\": \"testpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register", ""]
+						},
+						"description": "Yeni kullanıcı kaydı oluşturur."
+					},
+					"response": []
+				},
+				{
+					"name": "4. Profile (GET)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/profile/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "profile", ""]
+						},
+						"description": "Giriş yapmış kullanıcının profil bilgilerini getirir."
+					},
+					"response": []
+				},
+				{
+					"name": "5. Profile Update (PATCH)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"bilge_updated@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/profile/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "profile", ""]
+						},
+						"description": "Kullanıcı profil bilgilerini günceller."
+					},
+					"response": []
+				},
+				{
+					"name": "6. Change Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"old_password\": \"admin123\",\n    \"new_password\": \"yenisifre123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/change-password/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "change-password", ""]
+						},
+						"description": "Kullanıcı şifresini değiştirir."
+					},
+					"response": []
+				},
+				{
+					"name": "7. Delete Account",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/delete-account/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "delete-account", ""]
+						},
+						"description": "Kullanıcı hesabını siler. DİKKAT: Bu işlem geri alınamaz!"
+					},
+					"response": []
+				}
+			],
+			"description": "Kimlik doğrulama ve kullanıcı yönetimi endpoint'leri"
+		},
+		{
+			"name": "Study Sessions",
+			"item": [
+				{
+					"name": "1. Create Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.id) {",
+									"    pm.collectionVariables.set('session_id', jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"date\": \"2026-01-29\",\n    \"topic\": \"Django REST Framework\",\n    \"planned_duration\": 60\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/sessions/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "sessions", ""]
+						},
+						"description": "Yeni bir çalışma oturumu oluşturur. ID otomatik kaydedilir."
+					},
+					"response": []
+				},
+				{
+					"name": "2. List Sessions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/sessions/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "sessions", ""]
+						},
+						"description": "Kullanıcının tüm çalışma oturumlarını listeler."
+					},
+					"response": []
+				},
+				{
+					"name": "3. Get Session Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/sessions/{{session_id}}/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "sessions", "{{session_id}}", ""]
+						},
+						"description": "Belirli bir çalışma oturumunun detaylarını getirir."
+					},
+					"response": []
+				},
+				{
+					"name": "4. Update Session (PATCH)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"topic\": \"Django Advanced Topics\",\n    \"planned_duration\": 90\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/sessions/{{session_id}}/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "sessions", "{{session_id}}", ""]
+						},
+						"description": "Çalışma oturumunu günceller."
+					},
+					"response": []
+				},
+				{
+					"name": "5. Complete Session",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"completed\",\n    \"difficulty\": 3\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/sessions/{{session_id}}/complete/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "sessions", "{{session_id}}", "complete", ""]
+						},
+						"description": "Çalışma oturumunu tamamlar. Status: completed, partial, distracted. Difficulty: 1-5"
+					},
+					"response": []
+				},
+				{
+					"name": "6. Delete Session",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/sessions/{{session_id}}/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "sessions", "{{session_id}}", ""]
+						},
+						"description": "Çalışma oturumunu siler."
+					},
+					"response": []
+				}
+			],
+			"description": "Çalışma oturumları CRUD işlemleri"
+		},
+		{
+			"name": "Documentation",
+			"item": [
+				{
+					"name": "Swagger UI",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/docs/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "docs", ""]
+						},
+						"description": "Swagger UI dokümantasyonu. Tarayıcıda açın."
+					},
+					"response": []
+				},
+				{
+					"name": "ReDoc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/redoc/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "redoc", ""]
+						},
+						"description": "ReDoc dokümantasyonu. Tarayıcıda açın."
+					},
+					"response": []
+				},
+				{
+					"name": "OpenAPI Schema",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/schema/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "schema", ""]
+						},
+						"description": "OpenAPI 3.0 JSON schema."
+					},
+					"response": []
+				}
+			],
+			"description": "API dokümantasyonu endpoint'leri"
+		}
+	]
+}
