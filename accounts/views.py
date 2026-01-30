@@ -14,6 +14,14 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
+    def create(self, request, *args, **kwargs):
+        print("=" * 50)
+        print(f"Content-Type: {request.content_type}")
+        print(f"Body (raw): {request.body}")
+        print(f"Data (parsed): {request.data}")
+        print("=" * 50)
+        return super().create(request, *args, **kwargs)
+
 
 class ProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)

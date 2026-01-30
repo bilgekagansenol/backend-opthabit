@@ -127,10 +127,20 @@ source myenv/bin/activate
 python manage.py createsuperuser
 ```
 
-## Test Kullanıcısı
-- Username: `bilge`
-- Password: `admin123`
-- Superuser: Evet
+## Test Kullanıcıları
+| Username | Password | Superuser |
+|----------|----------|-----------|
+| bilge | admin123 | Evet |
+| admin | admin123 | Evet |
+
+## Android Emulator Desteği
+- `ALLOWED_HOSTS`'a `10.0.2.2` eklendi
+- Android emülatör host makineye bu IP ile erişir
+- Sunucuyu `python manage.py runserver 0.0.0.0:8000` ile başlatın
+
+## Mobil Uygulama İçin Yapılan Değişiklikler
+- Register endpoint'inden `password2` alanı kaldırıldı (şifre doğrulama UI tarafında yapılacak)
+- Register body: `{"username": "...", "email": "...", "password": "..."}`
 
 ## Son Güncelleme
-2026-01-29
+2026-01-30
